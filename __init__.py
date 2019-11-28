@@ -3,12 +3,14 @@ from salesforce_plugin.hooks.salesforce_hook import SalesforceHook
 from salesforce_plugin.operators.salesforce_schema_to_redshift_operator import SalesforceSchemaToRedshiftOperator
 from salesforce_plugin.operators.salesforce_to_s3_operator import SalesforceBulkQueryToS3Operator
 from salesforce_plugin.operators.salesforce_to_s3_operator import SalesforceToS3Operator
+from salesforce_plugin.operators.salesforce_to_s3_operator import SalesforceToS3RawOperator
 
 
 class SalesforceToRedshiftPlugin(AirflowPlugin):
     name = "salesforce_to_redshift_plugin"
     hooks = [SalesforceHook]
     operators = [SalesforceToS3Operator,
+                 SalesforceToS3RawOperator,
                  SalesforceSchemaToRedshiftOperator,
                  SalesforceBulkQueryToS3Operator]
     executors = []
