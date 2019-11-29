@@ -393,9 +393,11 @@ class SalesforceToS3RawOperator(BaseOperator):
             #                           fmt=self.fmt,
             #                           coerce_to_timestamp=self.coerce_to_timestamp,
             #                           record_time_added=self.record_time_added)
-            new_d = dict_sweep(query['records'], 'attributes')
+            
+            #new_d = dict_sweep(query['records'], 'attributes')
+            new_d = query['records']
 
-            json.dump(new_d, tmp, ensure_ascii=False, indent=4)
+            json.dump(new_d, tmp, ensure_ascii=False, indent=4, encoding="utf-8")
 
             # Flush the temp file and upload temp file to S3
             tmp.flush()
