@@ -351,7 +351,7 @@ class SalesforceToS3RawOperator(BaseOperator):
         logging.info("Prepping to gather data from Salesforce")
 
         # Open a name temporary file to store output file until S3 upload
-        with NamedTemporaryFile("w", encoding='utf-8') as tmp:
+        with NamedTemporaryFile("w") as tmp:
 
             # Load the SalesforceHook
             hook = SalesforceHook(conn_id=self.sf_conn_id, output=tmp.name)
