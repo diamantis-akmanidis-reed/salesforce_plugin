@@ -303,7 +303,7 @@ class SalesforceToS3RawOperator(BaseOperator):
                  *args,
                  **kwargs):
 
-        super(SalesforceToS3Operator, self).__init__(*args, **kwargs)
+        super(SalesforceToS3RawOperator, self).__init__(*args, **kwargs)
 
         self.sf_conn_id = sf_conn_id
         self.object = sf_obj
