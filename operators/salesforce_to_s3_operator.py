@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from tempfile import NamedTemporaryFile
 import logging
 import json
