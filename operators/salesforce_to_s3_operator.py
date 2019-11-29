@@ -9,6 +9,15 @@ from airflow.hooks.S3_hook import S3Hook
 from airflow.contrib.hooks.salesforce_hook import SalesforceHook
 
 
+def dict_sweep(input_dict, key):
+    if isinstance(input_dict, dict):
+        return {k: dict_sweep(v, key) for k, v in input_dict.items() if k != key}
+
+    elif isinstance(input_dict, list):
+        return [dict_sweep(element, key) for element in input_dict]
+    else:
+        return input_dict
+
 class SalesforceBulkQueryToS3Operator(BaseOperator):
     """
         Queries the Salesforce Bulk API using a SOQL stirng. Results are then
@@ -332,16 +341,6 @@ class SalesforceToS3RawOperator(BaseOperator):
             results['records'] = records
 
         return results
-
-    def dict_sweep(input_dict, key):
-        if isinstance(input_dict, dict):
-            return {k: dict_sweep(v, key) for k, v in input_dict.items() if k != key}
-
-        elif isinstance(input_dict, list):
-            return [dict_sweep(element, key) for element in input_dict]
-
-        else:
-            return input_dict
 
     def execute(self, context):
         """
