@@ -216,25 +216,28 @@ class SalesforceToS3Operator(BaseOperator):
             # the list of records is stored under the "records" key
             logging.info("Writing query results to: {0}".format(tmp.name))
 
-            hook.write_object_to_file(query['records'],
-                                      filename=tmp.name,
-                                      fmt=self.fmt,
-                                      coerce_to_timestamp=self.coerce_to_timestamp,
-                                      record_time_added=self.record_time_added)
+            if query['done'] == True and query['totalSize'] and query['totalSize'] > 0:
+                hook.write_object_to_file(query['records'],
+                                          filename=tmp.name,
+                                          fmt=self.fmt,
+                                          coerce_to_timestamp=self.coerce_to_timestamp,
+                                          record_time_added=self.record_time_added)
 
-            # Flush the temp file and upload temp file to S3
-            tmp.flush()
+                # Flush the temp file and upload temp file to S3
+                tmp.flush()
 
-            dest_s3 = S3Hook(self.s3_conn_id)
+                dest_s3 = S3Hook(self.s3_conn_id)
 
-            dest_s3.load_file(
-                filename=tmp.name,
-                key=self.s3_key,
-                bucket_name=self.s3_bucket,
-                replace=True
-            )
+                dest_s3.load_file(
+                    filename=tmp.name,
+                    key=self.s3_key,
+                    bucket_name=self.s3_bucket,
+                    replace=True
+                )
 
-            dest_s3.connection.close()
+                # dest_s3.connection.close()
+            else:
+                logging.info("Query Not Data!")
 
             tmp.close()
 
